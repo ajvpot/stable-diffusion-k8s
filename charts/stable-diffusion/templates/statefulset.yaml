@@ -45,10 +45,10 @@ spec:
           args:
             - -c
             - >-
-                wget -nc {{ .Values.models.sd14 }} -O /models/model.ckpt;
-                wget -nc {{ .Values.models.gfpGan13 }} -P /models;
-                wget -nc {{ .Values.models.realEsrGanx4p10 }} -P /models;
-                wget -nc {{ .Values.models.realEsrGanx4Animep02 }} -P /models
+                [ -f "/models/.sd14" ] || (wget -nc {{ .Values.models.sd14 }} -O /models/model.ckpt && touch /models/.sd14);
+                [ -f "/models/.gfpGan13" ] || (wget -nc {{ .Values.models.gfpGan13 }} -P /models && touch /models/.gfpGan13);
+                [ -f "/models/.RealESRGAN_x4plus" ] || (wget -nc {{ .Values.models.realEsrGanx4p10 }} -P /models && touch /models/.realEsrGanx4p10);
+                [ -f "/models/.RealESRGAN_x4plus_anime_6B" ] || (wget -nc {{ .Values.models.realEsrGanx4Animep02 }} -P /models && touch /models/.realEsrGanx4Animep02)
           volumeMounts:
             - mountPath: /models
               name: {{ include "stable-diffusion.fullname" . }}-model-store
@@ -83,3 +83,4 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      runtimeClassName: nvidia

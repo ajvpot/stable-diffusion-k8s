@@ -56,6 +56,7 @@ spec:
         - name: {{ .Chart.Name }}-stable-diffusion
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
+          runtimeClassName: nvidia
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           envFrom:
